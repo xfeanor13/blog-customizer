@@ -13,8 +13,13 @@ type Story = StoryObj<typeof ArrowButton>;
 export const ArrowButtonStory: Story = {
 	render: () =>
 		createElement(() => {
-			const [isOpen, setIsOpen] = useState(false);
+			const [isModalOpen, setIsModalOpen] = useState(false);
 
-			return <ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />;
+			return (
+				<ArrowButton
+					isModalOpen={isModalOpen}
+					onClick={() => setIsModalOpen(!isModalOpen)}
+				/>
+			);
 		}),
 };

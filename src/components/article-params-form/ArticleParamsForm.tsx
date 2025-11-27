@@ -1,6 +1,6 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Select } from '../../ui/select/Select';
 import { RadioGroup } from '../../ui/radio-group/RadioGroup';
 import { Separator } from '../../ui/separator/Separator';
@@ -31,7 +31,7 @@ type StateForm = {
 };
 
 export const ArticleParamsForm = ({ onApply, onReset }: Props) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const [stateForm, setStateForm] = useState<StateForm>({
 		fontFamilyOption: defaultArticleState.fontFamilyOption,
@@ -41,11 +41,17 @@ export const ArticleParamsForm = ({ onApply, onReset }: Props) => {
 		backgroundColor: defaultArticleState.backgroundColor,
 	});
 
+	useEffect(() => {
+		if (!isModalOpen) {
+			return;
+		}
+	}, [isModalOpen]);
+
 	useOutsideClickClose({
-		isOpen,
+		isModalOpen,
 		rootRef,
-		onChange: setIsOpen,
-		onClose: () => setIsOpen(false),
+		onChange: setIsModalOpen,
+		onClose: () => setIsModalOpen(false),
 	});
 
 	const [selectedFontSize, setSelectedFontSize] = useState<OptionType>(
@@ -112,15 +118,15 @@ export const ArticleParamsForm = ({ onApply, onReset }: Props) => {
 	return (
 		<>
 			<ArrowButton
-				isOpen={isOpen}
+				isModalOpen={isModalOpen}
 				onClick={() => {
-					setIsOpen(!isOpen);
+					setIsModalOpen(!isModalOpen);
 				}}
 			/>
 			<aside
 				ref={rootRef}
 				className={`${styles.container} ${
-					isOpen ? styles.container_open : ''
+					isModalOpen ? styles.container_open : ''
 				}`}>
 				<form className={styles.form} onSubmit={handleSubmit}>
 					<Select
